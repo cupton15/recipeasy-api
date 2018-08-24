@@ -25,18 +25,24 @@ class AuthController {
                 });
             }
         ];
-        this.login = (req, res) => {
-            console.log(req.body.email, req.body.password);
-            user_1.default.authenticate(req.body.email, req.body.password, (err, user) => {
-                if (err || !user) {
-                    console.log(err);
-                    console.log(user);
-                    return res.status(401).send();
+        this.login = [
+            body('displayName', 'display name is required').exists(),
+            body('email', 'email is required').exists(),
+            body('password', 'password is required').exists(),
+            (req, res) => {
+                const errors = validationResult(req);
+                if (!errors.isEmpty()) {
+                    return res.status(422).json({ errors: errors.array() });
                 }
-                req.session.userId = user._id;
-                return res.status(200).send();
-            });
-        };
+                user_1.default.authenticate(req.body.email, req.body.password, (err, user) => {
+                    if (err || !user) {
+                        return res.status(401).send();
+                    }
+                    req.session.userId = user._id;
+                    return res.status(200).send();
+                });
+            }
+        ];
     }
 }
 ;

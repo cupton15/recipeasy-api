@@ -6,12 +6,6 @@ class Routes {
         this.authController = new authController_1.default();
     }
     routes(app) {
-        app.route('/')
-            .get((req, res) => {
-            res.status(200).send({
-                message: 'GET SUCCESS'
-            });
-        });
         app.route('/signup')
             .post(this.authController.register);
         app.route('/login')
