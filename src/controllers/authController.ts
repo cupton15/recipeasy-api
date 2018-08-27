@@ -27,7 +27,7 @@ class AuthController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-        User.create(req.body, (err) => {
+        User.create(req.body, (err: Error) => {
             if(err) {
                 res.send(err);
             }
