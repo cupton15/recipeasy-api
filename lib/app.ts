@@ -1,6 +1,8 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
+
+const cors = require('cors');
 const session = require('express-session');
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -28,7 +30,8 @@ class App {
             secret: process.env.SECRET,
             resave: true,
             saveUninitialized: false,
-        }))
+        }));
+        this.app.use(cors());
     }
 
     private mongoSetup(): void{

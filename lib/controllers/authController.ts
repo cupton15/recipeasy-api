@@ -9,24 +9,22 @@ class AuthController {
         body('displayName', 'display name is required').exists(),
         body('email', 'email is required').exists(),
         body('email', 'email must be in a valid format').isEmail(),
-        body('email', 'email already in use').custom((value) => {
-            User.findOne( { email: value})
-                .exec((err, user) => {
-                    if(err) {
-                        return false;
+        body('email', 'email already in use').custom(value => {
+            return User.findOne( { email: value })
+                .then(user => {
+                    if(user) {
+                        return Promise.reject();
                     }
-                    return !user;
                 })
-        }),
+            }),
         body('password', 'password is required').exists(),
         body('passwordConfirm', 'passwords must match')
             .exists()
             .custom((value, { req }) => value === req.body.password),
         (req: Request, res: Response) => {
-            console.log(req.body.password);
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return res.status(422).json({ errors: errors.array() });
+                return res.status(400).json({ errors: errors.array() });
             }
 
         User.create(req.body, (err) => {
