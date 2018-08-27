@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 const { check, body , validationResult } = require('express-validator/check');
 import User from '../models/user';
+import ValidationError from '../interfaces/validationError.interface';
 
 
 class AuthController {
@@ -13,7 +14,7 @@ class AuthController {
             return User.findOne( { email: value })
                 .then(user => {
                     if(user) {
-                        return Promise.reject();
+                        return Promise.reject(); 
                     }
                 })
             }),
@@ -24,7 +25,7 @@ class AuthController {
         (req: Request, res: Response) => {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
+                return this.returnErrorMessage(errors, res);
             }
 
         User.create(req.body, (err: Error) => {
@@ -43,7 +44,7 @@ class AuthController {
             const errors = validationResult(req);
 
             if(!errors.isEmpty()) {
-                return res.status(422).json({ errors: errors.array() });
+                return this.returnErrorMessage(errors, res);
             }
 
             User.authenticate(req.body.email, req.body.password, (err, user) => {
@@ -65,6 +66,14 @@ class AuthController {
                 return res.status(200).send();
             })
         }
+    }
+
+    private returnErrorMessage(errors: any, res: Response) {
+        const validationErrors = errors.array().map(err => <ValidationError>{
+            param: err.param,
+            errorMessage: err.value
+        });
+        return res.status(400).json({ errors: validationErrors });
     }
 };
 
