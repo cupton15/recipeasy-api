@@ -25,7 +25,7 @@ class AuthController {
         (req: Request, res: Response) => {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return this.returnErrorMessage(errors, res);
+                return this.returnErrorResponse(errors, res);
             }
 
         User.create(req.body, (err: Error) => {
@@ -44,7 +44,7 @@ class AuthController {
             const errors = validationResult(req);
 
             if(!errors.isEmpty()) {
-                return this.returnErrorMessage(errors, res);
+                return this.returnErrorResponse(errors, res);
             }
 
             User.authenticate(req.body.email, req.body.password, (err, user) => {
@@ -68,7 +68,7 @@ class AuthController {
         }
     }
 
-    private returnErrorMessage(errors: any, res: Response) {
+    private returnErrorResponse(errors: any, res: Response) {
         const validationErrors = errors.array().map(err => <ValidationError>{
             param: err.param,
             errorMessage: err.value
