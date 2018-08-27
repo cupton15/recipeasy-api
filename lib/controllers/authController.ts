@@ -9,6 +9,15 @@ class AuthController {
         body('displayName', 'display name is required').exists(),
         body('email', 'email is required').exists(),
         body('email', 'email must be in a valid format').isEmail(),
+        body('email', 'email already in use').custom((value) => {
+            User.findOne( { email: value})
+                .exec((err, user) => {
+                    if(err) {
+                        return false;
+                    }
+                    return !user;
+                })
+        }),
         body('password', 'password is required').exists(),
         body('passwordConfirm', 'passwords must match')
             .exists()
@@ -20,13 +29,13 @@ class AuthController {
                 return res.status(422).json({ errors: errors.array() });
             }
 
-            User.create(req.body, (err) => {
-                if(err) {
-                    res.send(err);
-                }
-                return res.status(200).send();
-            })
-        }
+        User.create(req.body, (err) => {
+            if(err) {
+                res.send(err);
+            }
+            return res.status(200).send();
+        })
+    }
     ];
 
     public login = [
