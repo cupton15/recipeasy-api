@@ -17,21 +17,22 @@ class AuthController {
                     }
                 });
             }),
-        body("password", "password is required").exists(),
-        body("passwordConfirm", "passwords must match")
-            .exists()
-            .custom((value, { req }) => value === req.body.password),
+        body("password", "password is incorrect").exists()
+            .isLength({ min: 7 })
+            .withMessage("password must be at least 7 characters long")
+            .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/)
+            .withMessage("password must contain at least one capital letter, lower case letter and number"),
         (req: Request, res: Response) => {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 return this.returnErrorResponse(errors, res);
             }
 
-            User.create(req.body, (err: Error) => {
+            User.create(req.body, (err, user) => {
             if (err) {
-                res.send(err);
+                return res.status(400).send(err);
             }
-            return res.status(200).send();
+            return res.status(200).send(user);
         });
     },
     ];
