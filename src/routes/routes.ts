@@ -8,7 +8,7 @@ export class Routes {
         app.route('/api/register')
         .post(this.authController.register);
 
-        app.route('/login')
+        app.route('/api/login')
         .post(this.authController.login);
     }
 }

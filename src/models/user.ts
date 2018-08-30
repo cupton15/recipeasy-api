@@ -1,5 +1,5 @@
-import {Schema, model} from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import {model, Schema} from 'mongoose';
 
 const UserSchema = new Schema({
     email: {
@@ -29,13 +29,12 @@ UserSchema.pre('save', function(next) {
         }
         user.password = hash;
         user.passwordConfirm = hash;
-        return next()
+        return next();
     })
 });
 
 UserSchema.statics.authenticate = (email, password, callback) => {
-    console.log(email, password);
-    User.findOne({ email: email })
+    User.findOne({ email })
         .exec((err, user) => {
             if (err) {
                 return callback(err);
@@ -52,9 +51,9 @@ UserSchema.statics.authenticate = (email, password, callback) => {
                     return callback(null, user);
                 }
                 return callback();
-            })
-        })
-}
+            });
+        });
+};
 
 const User = model('User', UserSchema);
 

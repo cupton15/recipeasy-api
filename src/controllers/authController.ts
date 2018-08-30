@@ -54,7 +54,7 @@ class AuthController {
                 }
 
                 req.session.userId = user._id;
-                return res.status(200).send();
+                return res.status(200).send(user);
         });
     }];
 
