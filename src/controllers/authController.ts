@@ -53,7 +53,7 @@ class AuthController {
                     return new Error();
                 }
 
-                req.session.userId = user._id;
+                req.session.user = user;
                 return res.status(200).send(user);
         });
     }];
