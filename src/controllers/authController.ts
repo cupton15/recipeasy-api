@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import { body , validationResult } from "express-validator/check";
+import jwt = require("jsonwebtoken");
 import User from "../models/user";
 import { IValidationError } from "../types/validationError";
 
@@ -53,8 +54,10 @@ class AuthController {
                     return new Error();
                 }
 
-                req.session.user = user;
-                return res.status(200).send(user);
+                const token = jwt.sign({id: user._id}, process.env.SECRET, {
+                    expiresIn: 720,
+                });
+                return res.status(200).send({ auth: true, token });
         });
     }];
 
