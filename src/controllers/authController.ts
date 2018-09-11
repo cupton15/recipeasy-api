@@ -55,7 +55,7 @@ class AuthController {
                 }
 
                 const token = jwt.sign({id: user._id}, process.env.SECRET, {
-                    expiresIn: 720,
+                    expiresIn: "2h",
                 });
                 return res.status(200).send({ auth: true, token });
         });

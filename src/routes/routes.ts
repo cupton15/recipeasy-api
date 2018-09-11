@@ -1,9 +1,11 @@
 import {Request, Response} from "express";
-import jwt from "jsonwebtoken";
+import jwt = require("jsonwebtoken");
 import AuthController from "../controllers/authController";
+import UserController from "../controllers/userController";
 
 export class Routes {
     public authController: AuthController = new AuthController();
+    public userController: UserController = new UserController();
 
     public routes(app): void {
         const requiresAuth = (req, res, next) => {
@@ -13,11 +15,12 @@ export class Routes {
                 return res.status(401).send();
             }
 
-            jwt.verify(token, process.env.SECRET, (err) => {
+            jwt.verify(token, process.env.SECRET, (err, decoded) => {
                 if (err) {
-                    return res.status(500).send({message: "Failed to authenticate token"});
+                    return res.status(401).send({message: "Failed to authenticate token"});
                 }
 
+                req.userId = decoded.id;
                 next();
             });
         };
@@ -27,5 +30,8 @@ export class Routes {
 
         app.route("/api/login")
         .post(this.authController.login);
+
+        app.route("/api/displayname")
+            .get(requiresAuth, this.userController.getDisplayName);
     }
 }
