@@ -1,10 +1,8 @@
 import * as bodyParser from "body-parser";
-import cookieParser = require("cookie-parser");
 import * as express from "express";
 import * as mongoose from "mongoose";
 
 import cors = require("cors");
-import session = require("express-session");
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
@@ -26,16 +24,6 @@ class App {
     private config(): void {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false}));
-        this.app.use(
-            session({
-                resave: false,
-                secret: process.env.SECRET,
-                saveUninitialized: false,
-                cookie: {
-                    maxAge: 60000,
-                },
-            }),
-        );
         this.app.use(cors());
     }
 
