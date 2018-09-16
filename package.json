@@ -28,6 +28,8 @@
     "nodemon": "^1.18.3"
   },
   "devDependencies": {
-    "tslint-config-airbnb": "^5.10.0"
+    "ts-node": "^7.0.1",
+    "tslint-config-airbnb": "^5.10.0",
+    "typescript": "^3.0.3"
   }
 }
