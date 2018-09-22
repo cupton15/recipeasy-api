@@ -12,7 +12,7 @@ import { Routes } from "./routes/routes";
 class App {
     public app: express.Application;
     public routeProvider: Routes = new Routes();
-    public mongoUrl: string = "mongodb://localhost/recipeasy";
+    public mongoUrl: string = process.env.DB_CONNECTION_STRING;
 
     constructor() {
         this.app = express();
