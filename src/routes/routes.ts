@@ -25,13 +25,13 @@ export class Routes {
             });
         };
 
-        app.route("/api/register")
+        app.route(process.env.BASE_URL + "/register")
         .post(this.authController.register);
 
-        app.route("/api/login")
+        app.route(process.env.BASE_URL + "/login")
         .post(this.authController.login);
 
-        app.route("/api/displayname")
+        app.route(process.env.BASE_URL + "/displayname")
             .get(requiresAuth, this.userController.getDisplayName);
     }
 }
