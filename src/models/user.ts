@@ -35,7 +35,7 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.statics.authenticate = (email, password, callback) => {
     User.findOne({ email })
-        .exec((err, user) => {
+        .then((err, user) => {
             if (err) {
                 console.log(err);
                 return callback(err);
