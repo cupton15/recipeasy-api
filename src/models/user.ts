@@ -52,6 +52,9 @@ UserSchema.statics.authenticate = (email, password, callback) => {
                 }
                 return callback();
             });
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };
 
