@@ -37,6 +37,7 @@ UserSchema.statics.authenticate = (email, password, callback) => {
     User.findOne({ email })
         .exec((err, user) => {
             if (err) {
+                console.log(err);
                 return callback(err);
             }
 
@@ -52,9 +53,6 @@ UserSchema.statics.authenticate = (email, password, callback) => {
                 }
                 return callback();
             });
-        })
-        .catch((err) => {
-            console.log(err);
         });
 };
 
