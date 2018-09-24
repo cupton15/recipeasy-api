@@ -51,8 +51,7 @@ class AuthController {
 
             User.authenticate(req.body.email, req.body.password, (err, user) => {
                 if (err || !user) {
-                    console.log('are we here?');
-                    return new Error();
+                    return res.status(500).send();
                 }
 
                 const token = jwt.sign({id: user._id}, process.env.SECRET, {
