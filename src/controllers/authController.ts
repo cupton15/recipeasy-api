@@ -51,6 +51,7 @@ class AuthController {
 
             User.authenticate(req.body.email, req.body.password, (err, user) => {
                 if (err || !user) {
+                    console.log('are we here?');
                     return new Error();
                 }
 
