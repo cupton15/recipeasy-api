@@ -51,7 +51,10 @@ class AuthController {
 
             User.authenticate(req.body.email, req.body.password, (err, user) => {
                 if (err || !user) {
-                    return res.status(500).send();
+                    if(!user) {
+                        return this.returnErrorResponse({ param: 'email', msg: 'no user for provided email'}, res);
+                    }
+                    return this.returnErrorResponse({param: 'unknown', msg: 'unknown error occurred'}, res);
                 }
 
                 const token = jwt.sign({id: user._id}, process.env.SECRET, {
@@ -65,7 +68,7 @@ class AuthController {
         if (req.session) {
             req.session.destroy((err) => {
                 if (err) {
-                    return new Error(err);
+                    return this.returnErrorResponse(err, res);
                 }
                 return res.status(200).send();
             });
